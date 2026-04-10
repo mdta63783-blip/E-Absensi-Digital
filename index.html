@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>E-Absensi Digital</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #f3f4f6; }
-        /* Trik nenggelamin banner Google */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #f3f4f6; 
+        }
+        
         iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: calc(100vh + 65px); 
+            /* Melebihkan tinggi agar bagian bawah tidak terpotong saat ditarik ke atas */
+            height: calc(100% + 65px); 
             border: none;
-            margin-bottom: -65px; 
+            /* Menarik banner 'Made by Google' keluar dari layar atas */
+            margin-top: -65px; 
         }
     </style>
 </head>
