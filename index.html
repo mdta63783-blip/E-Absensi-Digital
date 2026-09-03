@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Absensi Digital</title>
-
-    <style>
-        html, body { 
-            margin: 0; 
-            padding: 0; 
-            height: 100%; 
-            width: 100%; 
-            background-color: #f3f4f6; 
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Absensi Digital</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#166534">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+html,body{margin:0;padding:0;height:100%;width:100%;background:#f3f4f6}
+iframe{width:100%;height:100%;border:none}
+</style>
 </head>
 <body>
-
-<iframe 
-    src="https://script.google.com/a/~/macros/s/AKfycbwO2D8NSckjdRRXix6RBVJIzZBJDsxZa4a78Bngwu8cGKcZJVwjqzAjxE-A4unsrOzsIQ/exec"
-    allow="geolocation; camera; microphone">
-</iframe>
-
+<iframe src="https://script.google.com/a/~/macros/s/AKfycbwO2D8NSckjdRRXix6RBVJIzZBJDsxZa4a78Bngwu8cGKcZJVwjqzAjxE-A4unsrOzsIQ/exec" allow="geolocation; camera; microphone"></iframe>
+<script>
+if('serviceWorker' in navigator){
+window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(console.error));
+}
+</script>
 </body>
 </html>
