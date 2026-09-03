@@ -1,24 +1,139 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Absensi Digital</title>
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#166534">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<style>
-html,body{margin:0;padding:0;height:100%;width:100%;background:#f3f4f6}
-iframe{width:100%;height:100%;border:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Absensi Digital</title>
+
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#166534">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="./icon-192.png">
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #f3f4f6;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #installAppBtn {
+            position: fixed;
+            right: 16px;
+            bottom: 18px;
+            z-index: 999999;
+            border: none;
+            border-radius: 999px;
+            background: #facc15;
+            color: #111827;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 12px 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.22);
+            cursor: pointer;
+        }
+
+        #installAppBtn:active {
+            transform: scale(.97);
+        }
+
+        #installHint {
+            display: none;
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: 76px;
+            z-index: 999999;
+            background: #111827;
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.45;
+            box-shadow: 0 8px 24px rgba(0,0,0,.25);
+        }
+    </style>
 </head>
 <body>
-<iframe src="https://script.google.com/a/~/macros/s/AKfycbwO2D8NSckjdRRXix6RBVJIzZBJDsxZa4a78Bngwu8cGKcZJVwjqzAjxE-A4unsrOzsIQ/exec" allow="geolocation; camera; microphone"></iframe>
+
+<iframe
+    src="https://script.google.com/a/~/macros/s/AKfycbwO2D8NSckjdRRXix6RBVJIzZBJDsxZa4a78Bngwu8cGKcZJVwjqzAjxE-A4unsrOzsIQ/exec"
+    allow="geolocation; camera; microphone">
+</iframe>
+
+<button id="installAppBtn" type="button">⬇ Instal Aplikasi</button>
+
+<div id="installHint">
+    Jika dialog instal belum muncul, buka menu ⋮ Chrome lalu pilih
+    <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.
+</div>
+
 <script>
-if('serviceWorker' in navigator){
-window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(console.error));
+let deferredPrompt = null;
+
+const installBtn = document.getElementById('installAppBtn');
+const installHint = document.getElementById('installHint');
+
+window.addEventListener('beforeinstallprompt', function(event) {
+    event.preventDefault();
+    deferredPrompt = event;
+});
+
+installBtn.addEventListener('click', async function() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+
+        const choiceResult = await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        if (choiceResult.outcome === 'accepted') {
+            installBtn.style.display = 'none';
+            installHint.style.display = 'none';
+        }
+
+        return;
+    }
+
+    installHint.style.display = 'block';
+
+    setTimeout(function() {
+        installHint.style.display = 'none';
+    }, 6000);
+});
+
+window.addEventListener('appinstalled', function() {
+    installBtn.style.display = 'none';
+    installHint.style.display = 'none';
+});
+
+if (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true
+) {
+    installBtn.style.display = 'none';
+}
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker
+            .register('./service-worker.js')
+            .catch(function(error) {
+                console.error('Service Worker gagal:', error);
+            });
+    });
 }
 </script>
+
 </body>
 </html>
